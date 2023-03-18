@@ -81,7 +81,6 @@ export default function App_2() {
                 </MDBCol>
                 <MDBCol md="4" lg="4" xl="4">
                   <PerfectScrollbar
-                    suppressScrollX
                     style={{ position: "relative", height: "400px" }}
                     className="pt-3 pe-3"
                   >
