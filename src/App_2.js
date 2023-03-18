@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MDBContainer,
   MDBRow,
@@ -15,209 +15,71 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 export default function App_2() {
+  const [file, setFile] = useState(null);
+  const [jd, setjd] = useState("");
+  const onJDChange = (e) => {
+    setjd(e.target.value)
+  }
+  const onFileChange = (e) => {
+    if(e.target.files){
+      if(e.target.files[0].type === "application/pdf" || e.target.files[0].type === "image/png" )
+        setFile(e.target.files[0])
+      else
+        return
+    }
+  }
+  const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+  const [viewPdf, setViewPdf]=useState(null);
+
+  const handleUploadClick = async () => {
+    if (!file) {
+      return;
+    }
+    const cvBase64 = await toBase64(file);
+    const base64ImageData = cvBase64.substring(cvBase64.indexOf(',') + 1);
+    console.log(JSON.stringify({ 
+       jd,
+       base64ImageData }))
+
+
+    // 👇 Uploading the file using the fetch API to the server
+    fetch('https://flat-insects-boil-103-160-76-63.loca.lt/predict', {
+      method: 'POST',
+      body: JSON.stringify({ jd: {jd}, cv: {base64ImageData} }),
+      // 👇 Set headers manually for single file upload
+      headers: {
+        'content-type': file.type,
+        'content-length': `${file.size}`, // 👈 Headers need to be a string
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.error(err));
+  };
   return (
     <MDBContainer fluid className="py-5" style={{ backgroundColor: "#CDC4F9" }}>
       <MDBRow>
         <MDBCol md="12">
           <MDBCard id="chat3" style={{ borderRadius: "15px" }}>
-            <MDBCardBody>
+            <MDBCardBody >
               <MDBRow>
-                <MDBCol md="6" lg="5" xl="4" className="mb-4 mb-md-0">
-                  <div className="p-3">
-                    <MDBInputGroup className="rounded mb-3">
-                      <input
-                        className="form-control rounded"
-                        placeholder="Search"
-                        type="search"
-                      />
-                      <span
-                        className="input-group-text border-0"
-                        id="search-addon"
-                      >
-                        <MDBIcon fas icon="search" />
-                      </span>
-                    </MDBInputGroup>
-
-                    <PerfectScrollbar
-                      suppressScrollX
-                      style={{ position: "relative", height: "400px" }}
-                    >
-                      <MDBTypography listUnStyled className="mb-0">
-                        <li className="p-2 border-bottom">
-                          <a
-                            href="#!"
-                            className="d-flex justify-content-between"
-                          >
-                            <div className="d-flex flex-row">
-                              <div>
-                                <img
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                  alt="avatar"
-                                  className="d-flex align-self-center me-3"
-                                  width="60"
-                                />
-                                <span className="badge bg-success badge-dot"></span>
-                              </div>
-                              <div className="pt-1">
-                                <p className="fw-bold mb-0">Marie Horwitz</p>
-                                <p className="small text-muted">
-                                  Hello, Are you there?
-                                </p>
-                              </div>
-                            </div>
-                            <div className="pt-1">
-                              <p className="small text-muted mb-1">Just now</p>
-                              <span className="badge bg-danger rounded-pill float-end">
-                                3
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="p-2 border-bottom">
-                          <a
-                            href="#!"
-                            className="d-flex justify-content-between"
-                          >
-                            <div class="d-flex flex-row">
-                              <div>
-                                <img
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                                  alt="avatar"
-                                  className="d-flex align-self-center me-3"
-                                  width="60"
-                                />
-                                <span className="badge bg-warning badge-dot"></span>
-                              </div>
-                              <div className="pt-1">
-                                <p className="fw-bold mb-0">Alexa Chung</p>
-                                <p className="small text-muted">
-                                  Lorem ipsum dolor sit.
-                                </p>
-                              </div>
-                            </div>
-                            <div className="pt-1">
-                              <p className="small text-muted mb-1">
-                                5 mins ago
-                              </p>
-                              <span className="badge bg-danger rounded-pill float-end">
-                                2
-                              </span>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="p-2 border-bottom">
-                          <a
-                            href="#!"
-                            className="d-flex justify-content-between"
-                          >
-                            <div className="d-flex flex-row">
-                              <div>
-                                <img
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3-bg.webp"
-                                  alt="avatar"
-                                  className="d-flex align-self-center me-3"
-                                  width="60"
-                                />
-                                <span className="badge bg-success badge-dot"></span>
-                              </div>
-                              <div className="pt-1">
-                                <p className="fw-bold mb-0">Danny McChain</p>
-                                <p className="small text-muted">
-                                  Lorem ipsum dolor sit.
-                                </p>
-                              </div>
-                            </div>
-                            <div className="pt-1">
-                              <p className="small text-muted mb-1">Yesterday</p>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="p-2 border-bottom">
-                          <a
-                            href="#!"
-                            className="d-flex justify-content-between"
-                          >
-                            <div className="d-flex flex-row">
-                              <div>
-                                <img
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp"
-                                  alt="avatar"
-                                  className="d-flex align-self-center me-3"
-                                  width="60"
-                                />
-                                <span className="badge bg-danger badge-dot"></span>
-                              </div>
-                              <div className="pt-1">
-                                <p className="fw-bold mb-0">Ashley Olsen</p>
-                                <p className="small text-muted">
-                                  Lorem ipsum dolor sit.
-                                </p>
-                              </div>
-                            </div>
-                            <div className="pt-1">
-                              <p className="small text-muted mb-1">Yesterday</p>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="p-2 border-bottom">
-                          <a
-                            href="#!"
-                            className="d-flex justify-content-between"
-                          >
-                            <div className="d-flex flex-row">
-                              <div>
-                                <img
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava5-bg.webp"
-                                  alt="avatar"
-                                  className="d-flex align-self-center me-3"
-                                  width="60"
-                                />
-                                <span className="badge bg-warning badge-dot"></span>
-                              </div>
-                              <div className="pt-1">
-                                <p className="fw-bold mb-0">Kate Moss</p>
-                                <p className="small text-muted">
-                                  Lorem ipsum dolor sit.
-                                </p>
-                              </div>
-                            </div>
-                            <div className="pt-1">
-                              <p className="small text-muted mb-1">Yesterday</p>
-                            </div>
-                          </a>
-                        </li>
-                        <li className="p-2">
-                          <a
-                            href="#!"
-                            className="d-flex justify-content-between"
-                          >
-                            <div class="d-flex flex-row">
-                              <div>
-                                <img
-                                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                  alt="avatar"
-                                  className="d-flex align-self-center me-3"
-                                  width="60"
-                                />
-                                <span className="badge bg-success badge-dot"></span>
-                              </div>
-                              <div className="pt-1">
-                                <p className="fw-bold mb-0">Ben Smith</p>
-                                <p className="small text-muted">
-                                  Lorem ipsum dolor sit.
-                                </p>
-                              </div>
-                            </div>
-                            <div className="pt-1">
-                              <p className="small text-muted mb-1">Yesterday</p>
-                            </div>
-                          </a>
-                        </li>
-                      </MDBTypography>
-                    </PerfectScrollbar>
-                  </div>
+                <MDBCol md="4" lg="4" xl="4" className="mb-4 mb-md-0">
+                  <input type="file" onChange={onFileChange} />
+                  <div>{file && `${file.name} - ${file.type}`}</div>
+                  <div style={{margin: "10px"}}><p>Job Description</p></div>
+                  <textarea  style={{width: "350px", height: "450px"}}  placeholder="Input JD..." onChange={onJDChange} />
+                  <br></br>
+                  <input type="button" value="Submit" className="btn btn-success btn-lg" onClick={handleUploadClick}/>
                 </MDBCol>
-                <MDBCol md="6" lg="7" xl="8">
+                <MDBCol md="4" lg="4" xl="4" className="mb-4 mb-md-0 pdf-container">
+                  
+                </MDBCol>
+                <MDBCol md="4" lg="4" xl="4">
                   <PerfectScrollbar
                     suppressScrollX
                     style={{ position: "relative", height: "400px" }}
