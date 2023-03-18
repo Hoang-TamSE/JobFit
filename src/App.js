@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MDBContainer,
   MDBRow,
@@ -12,11 +12,23 @@ import {
   MDBInputGroup,
 } from "mdb-react-ui-kit";
 
-import 'react-perfect-scrollbar/dist/css/styles.css';
+import "react-perfect-scrollbar/dist/css/styles.css";
 
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import PerfectScrollbar from "react-perfect-scrollbar";
+import TextMessage from "./TextMessage";
 
 export default function App() {
+  const [message, setMessage] = useState("");
+
+  const onInputChange = (e) => {
+    setMessage(e.target.value);
+  };
+
+  const handleSubmit = () => {
+    console.log(message);
+    setMessage(" ");
+  };
+
   return (
     <MDBContainer fluid className="py-5" style={{ backgroundColor: "#eee" }}>
       <MDBRow className="d-flex justify-content-center">
@@ -130,6 +142,7 @@ export default function App() {
                     style={{ width: "45px", height: "100%" }}
                   />
                 </div>
+                <TextMessage message = {message}></TextMessage>
               </MDBCardBody>
             </PerfectScrollbar>
             <MDBCardFooter className="text-muted d-flex justify-content-start align-items-center p-3">
@@ -138,9 +151,15 @@ export default function App() {
                   className="form-control"
                   placeholder="Type message"
                   type="text"
+                  value={message}
+                  onChange={onInputChange}
                 />
-                <MDBBtn color="warning" style={{ paddingTop: ".55rem" }}>
-                  Button
+                <MDBBtn
+                  color="warning"
+                  style={{ paddingTop: ".55rem" }}
+                  onClick={handleSubmit}
+                >
+                  Send
                 </MDBBtn>
               </MDBInputGroup>
             </MDBCardFooter>
