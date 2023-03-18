@@ -19,38 +19,38 @@ export default function App_2() {
   const [urlImage, setUrlImage] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [userMesss, setUserMesss] = useState(['aaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaa']);
-  const onSubmitMess = (e) => {
-    setUrlImage(arr => [...arr, e.value.target])
-  }
+  // const onSubmitMess = (e) => {
+  //   setUrlImage(arr => [...arr, e.value.target])
+  // }
 
   const [jd, setjd] = useState("");
   const onJDChange = (e) => {
     setjd(e.target.value)
   }
-  var indents = userMesss.map(function (i) {
-    return (
-      <div className="d-flex flex-row justify-content-end">
-        <div>
-          <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
-            {i}
-          </p>
+  // var indents = userMesss.map(function (i) {
+  //   return (
+  //     <div className="d-flex flex-row justify-content-end">
+  //       <div>
+  //         <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+  //           {i}
+  //         </p>
 
-        </div>
-        <img
-          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-          alt="avatar 1"
-          style={{ width: "45px", height: "100%" }}
-        />
-      </div>
-    );
-  });
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (newMessage !== '') {
-      setUserMesss([...userMesss, newMessage]);
-      setNewMessage('');
-    }
-  };
+  //       </div>
+  //       <img
+  //         src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+  //         alt="avatar 1"
+  //         style={{ width: "45px", height: "100%" }}
+  //       />
+  //     </div>
+  //   );
+  // });
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   if (newMessage !== '') {
+  //     setUserMesss([...userMesss, newMessage]);
+  //     setNewMessage('');
+  //   }
+  // };
   const onFileChange = (e) => {
     if (e.target.files) {
       // if(e.target.files[0].type === "application/pdf" || e.target.files[0].type === "image/png" )
