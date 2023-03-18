@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import './index.css';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import App_2 from './App_2';
+import "./index.css";
+import "mdb-react-ui-kit/dist/css/mdb.min.css";
+import reportWebVitals from "./reportWebVitals";
+import App from "./App";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
-    <App_2 />
-  </React.StrictMode>
+  <StrictMode>
+    <App />
+  </StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
