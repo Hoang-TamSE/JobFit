@@ -20,7 +20,7 @@ export default function App_2() {
   const [newMessage, setNewMessage] = useState('');
   const [userMesss, setUserMesss] = useState([]);
   const [botMess, setBotMess] = useState([]);
-  const [botCV, setBotCV] = useState('aaaaaaa');
+  const [botCV, setBotCV] = useState('');
   const onSubmitMess = (e) => {
     setUrlImage(arr => [...arr, e.value.target])
   }
@@ -50,8 +50,8 @@ export default function App_2() {
     event.preventDefault();
     if (newMessage !== '') {
       setUserMesss([...userMesss, newMessage]);
-      console.log(userMesss);
-      fetch('http://103.160.76.63:8501/chat', {
+      console.log(newMessage);
+      fetch('http://103.160.76.63:5000/chat', {
         method: 'POST',
         body: JSON.stringify({ "data": newMessage }),
         // 👇 Set headers manually for single file upload
@@ -62,7 +62,8 @@ export default function App_2() {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.data(data)
+          console.log(data)
+          setBotMess([...botMess, data['bot_response']])
         })
         .catch((err) => console.error(err));
 
@@ -108,7 +109,7 @@ export default function App_2() {
 
 
     // 👇 Uploading the file using the fetch API to the server
-    fetch('http://103.160.76.63:8501/all', {
+    fetch('http://103.160.76.63:5000/all', {
       method: 'POST',
       body: JSON.stringify({ "job_requirements": jd, "resume_info": base64ImageData }),
       // 👇 Set headers manually for single file upload
