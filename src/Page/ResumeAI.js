@@ -17,15 +17,50 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
 export default function ResumeAI() {
-  const [message, setMessage] = useState("");
-  const [messageList, setMessageList] = useState([]);
   const [file, setFile] = useState(null);
   const [urlImage, setUrlImage] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
+  const [userMesss, setUserMesss] = useState([]);
+  const [botMess, setBotMess] = useState([]);
+  const onSubmitMess = (e) => {
+    setUrlImage((arr) => [...arr, e.value.target]);
+  };
+
   const [jd, setjd] = useState("");
   const onJDChange = (e) => {
     setjd(e.target.value);
   };
-
+  var indents = userMesss.map(function(i) {
+    return (
+      <div className="d-flex flex-row justify-content-end">
+        <div>
+          <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+            {i}
+          </p>
+        </div>
+        <img
+          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+          alt="avatar 1"
+          style={{ width: "45px", height: "100%" }}
+        />
+      </div>
+    );
+  });
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (newMessage !== "") {
+      setUserMesss([...userMesss, newMessage]);
+      console.log(userMesss);
+      setNewMessage("");
+      setTimeout(
+        () => setBotMess([...botMess, "bot ramdom test okiiii"]),
+        1000
+      );
+    }
+  };
+  const callBot = () => {
+    setUserMesss([...userMesss, "tâmmmmmm"]);
+  };
   const onFileChange = (e) => {
     if (e.target.files) {
       // if(e.target.files[0].type === "application/pdf" || e.target.files[0].type === "image/png" )
@@ -35,19 +70,6 @@ export default function ResumeAI() {
       setFile(e.target.files[0]);
     }
   };
-
-  const onInputChange = (e) => {
-    setMessage(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (message !== "") {
-      setMessageList([...messageList, message]);
-      setMessage("");
-    }
-  };
-
   const toBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -55,7 +77,6 @@ export default function ResumeAI() {
       reader.onload = () => resolve(reader.result);
       reader.onerror = (error) => reject(error);
     });
-
   const [viewPdf, setViewPdf] = useState(null);
 
   const handleUploadClick = async () => {
@@ -67,15 +88,18 @@ export default function ResumeAI() {
     const base64ImageData = cvBase64.substring(cvBase64.indexOf(",") + 1);
     console.log(
       JSON.stringify({
-        jd,
-        base64ImageData,
+        job_requirements: jd,
+        resume_info: base64ImageData,
       })
     );
 
     // 👇 Uploading the file using the fetch API to the server
-    fetch("http://103.160.76.63:5000/predict", {
+    fetch("http://103.160.76.63:5000/chat", {
       method: "POST",
-      body: JSON.stringify({ jd: { jd }, cv: { base64ImageData } }),
+      body: JSON.stringify({
+        job_requirements: jd,
+        resume_info: base64ImageData,
+      }),
       // 👇 Set headers manually for single file upload
       headers: {
         "content-type": file.type,
@@ -111,7 +135,7 @@ export default function ResumeAI() {
             />
           </MDBCol>
           <MDBCol md="4" lg="4" xl="4" className="mb-4 mb-md-0 pdf-container">
-            <img src={urlImage} />
+            <img src={urlImage} style={{ height: "100%", width: "100%" }} />
           </MDBCol>
           <MDBCol md="8" lg="6" xl="4">
             <MDBCard>
@@ -146,19 +170,37 @@ export default function ResumeAI() {
                 style={{ position: "relative", height: "400px" }}
               >
                 <MDBCardBody>
-                  {messageList.map(function(i) {
+                  {userMesss.map(function(i, index) {
                     return (
-                      <div className="d-flex flex-row justify-content-end">
-                        <div>
-                          <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
-                            {i}
-                          </p>
+                      <div>
+                        <div className="d-flex flex-row justify-content-end">
+                          <div>
+                            <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+                              {i}
+                            </p>
+                          </div>
+                          <img
+                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                            alt="avatar 1"
+                            style={{ width: "45px", height: "100%" }}
+                          />
                         </div>
-                        <img
-                          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                          alt="avatar 1"
-                          style={{ width: "45px", height: "100%" }}
-                        />
+
+                        <div className="d-flex flex-row justify-content-start">
+                          <img
+                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                            alt="avatar 1"
+                            style={{ width: "45px", height: "100%" }}
+                          />
+                          <div>
+                            <p
+                              className="small p-2 ms-3 mb-1 rounded-3"
+                              style={{ backgroundColor: "#f5f6f7" }}
+                            >
+                              {botMess[index]}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     );
                   })}
@@ -170,8 +212,8 @@ export default function ResumeAI() {
                     className="form-control"
                     placeholder="Type message"
                     type="text"
-                    value={message}
-                    onChange={onInputChange}
+                    value={newMessage}
+                    onChange={(event) => setNewMessage(event.target.value)}
                   />
                   <MDBBtn
                     color="warning"
