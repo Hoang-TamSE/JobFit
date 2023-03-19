@@ -18,7 +18,8 @@ export default function App_2() {
   const [file, setFile] = useState(null);
   const [urlImage, setUrlImage] = useState(null);
   const [newMessage, setNewMessage] = useState('');
-  const [userMesss, setUserMesss] = useState(['aaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaa']);
+  const [userMesss, setUserMesss] = useState([]);
+  const [botMess, setBotMess] = useState([]);
   const onSubmitMess = (e) => {
     setUrlImage(arr => [...arr, e.value.target])
   }
@@ -48,9 +49,18 @@ export default function App_2() {
     event.preventDefault();
     if (newMessage !== '') {
       setUserMesss([...userMesss, newMessage]);
+      console.log(userMesss);
       setNewMessage('');
+      setTimeout(() => setBotMess([...botMess, "bot ramdom test okiiii"]), 1000);
+
+      
+
     }
+
   };
+  const callBot = () => {
+    setUserMesss([...userMesss, "tâmmmmmm"]);
+  }
   const onFileChange = (e) => {
     if (e.target.files) {
       // if(e.target.files[0].type === "application/pdf" || e.target.files[0].type === "image/png" )
@@ -77,15 +87,15 @@ export default function App_2() {
     const cvBase64 = await toBase64(file);
     const base64ImageData = cvBase64.substring(cvBase64.indexOf(',') + 1);
     console.log(JSON.stringify({
-      jd,
-      base64ImageData
+      "job_requirements": jd,
+      "resume_info": base64ImageData
     }))
 
 
     // 👇 Uploading the file using the fetch API to the server
-    fetch('http://103.160.76.63:5000/predict', {
+    fetch('http://103.160.76.63:5000/chat', {
       method: 'POST',
-      body: JSON.stringify({ jd: { jd }, cv: { base64ImageData } }),
+      body: JSON.stringify({ "job_requirements": jd, "resume_info": base64ImageData }),
       // 👇 Set headers manually for single file upload
       headers: {
         'content-type': file.type,
@@ -112,7 +122,7 @@ export default function App_2() {
                   <input type="button" value="Submit" className="btn btn-success btn-lg" onClick={handleUploadClick} />
                 </MDBCol>
                 <MDBCol md="4" lg="4" xl="4" className="mb-4 mb-md-0 pdf-container">
-                  <img src={urlImage} />
+                  <img src={urlImage} style={{ height: "100%", width: "100%" }} />
                 </MDBCol>
                 <MDBCol md="4" lg="4" xl="4">
                   <PerfectScrollbar
@@ -154,25 +164,44 @@ export default function App_2() {
                         style={{ width: "45px", height: "100%" }}
                       />
                     </div>
-                    {userMesss.map(function (i) {
-                      return (
-                        <div className="d-flex flex-row justify-content-end">
+                    {userMesss.map(function (i, index) {
+                        return (
                           <div>
-                            <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
-                              {i}
-                            </p>
+                            <div className="d-flex flex-row justify-content-end">
+                              <div>
+                                <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+                                  {i}
+                                </p>
 
+                              </div>
+                              <img
+                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                                alt="avatar 1"
+                                style={{ width: "45px", height: "100%" }}
+                              />
+                            </div>
+
+                            <div className="d-flex flex-row justify-content-start">
+                              <img
+                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                                alt="avatar 1"
+                                style={{ width: "45px", height: "100%" }}
+                              />
+                              <div>
+                                <p
+                                  className="small p-2 ms-3 mb-1 rounded-3"
+                                  style={{ backgroundColor: "#f5f6f7" }}
+                                >
+                                  {botMess[index]}
+                                </p>
+
+                              </div>
+                            </div>
                           </div>
-                          <img
-                            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                            alt="avatar 1"
-                            style={{ width: "45px", height: "100%" }}
-                          />
-                        </div>
-                      );
+
+
+                        );
                     })}
-
-
                   </PerfectScrollbar>
                   <div className="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
                     <img
