@@ -20,6 +20,7 @@ export default function App_2() {
   const [newMessage, setNewMessage] = useState('');
   const [userMesss, setUserMesss] = useState([]);
   const [botMess, setBotMess] = useState([]);
+  const [botCV, setBotCV] = useState('aaaaaaa');
   const onSubmitMess = (e) => {
     setUrlImage(arr => [...arr, e.value.target])
   }
@@ -50,12 +51,26 @@ export default function App_2() {
     if (newMessage !== '') {
       setUserMesss([...userMesss, newMessage]);
       console.log(userMesss);
-      setNewMessage('');
-      setTimeout(() => setBotMess([...botMess, "bot ramdom test okiiii"]), 1000);
+      fetch('http://103.160.76.63:8501/chat', {
+        method: 'POST',
+        body: JSON.stringify({ "data": newMessage }),
+        // 👇 Set headers manually for single file upload
+        headers: {
+          'content-type': newMessage.type,
+          'content-length': `${newMessage.length}`, // 👈 Headers need to be a string
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.data(data)
+        })
+        .catch((err) => console.error(err));
 
-      
+
 
     }
+    setNewMessage('');
+
 
   };
   const callBot = () => {
@@ -93,7 +108,7 @@ export default function App_2() {
 
 
     // 👇 Uploading the file using the fetch API to the server
-    fetch('http://103.160.76.63:5000/chat', {
+    fetch('http://103.160.76.63:8501/all', {
       method: 'POST',
       body: JSON.stringify({ "job_requirements": jd, "resume_info": base64ImageData }),
       // 👇 Set headers manually for single file upload
@@ -103,17 +118,46 @@ export default function App_2() {
       },
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        console.log(data['bot_response'])
+        setBotCV(data['bot_response'])
+      })
       .catch((err) => console.error(err));
   };
+  const GetValueFromBot = () => {
+    return (
+      <div className="d-flex flex-row justify-content-start">
+        <img
+          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+          alt="avatar 1"
+          style={{ width: "45px", height: "100%" }}
+        />
+        <div>
+          <p
+            className="small p-2 ms-3 mb-1 rounded-3"
+            style={{ backgroundColor: "#f5f6f7" }}
+          >
+            {botCV}
+          </p>
+
+        </div>
+      </div>
+    )
+  }
+  const startChat = () => (
+    <div style={{ textAlign: "center", fontSize: "30px", fontWeight: "bold" }}>
+      Job Fit
+    </div>
+  )
+
   return (
     <MDBContainer fluid className="py-5" style={{ backgroundColor: "#CDC4F9" }}>
       <MDBRow>
-        <MDBCol md="12">
+        <MDBCol md="12" lg="12">
           <MDBCard id="chat3" style={{ borderRadius: "15px" }}>
             <MDBCardBody >
               <MDBRow>
-                <MDBCol md="4" lg="4" xl="4" className="mb-4 mb-md-0">
+                <MDBCol md="4" lg="4" xl="3" className="mb-4 mb-md-0">
                   <input type="file" onChange={onFileChange} />
                   <div>{file && `${file.name} - ${file.type}`}</div>
                   <div style={{ margin: "10px" }}><p>Job Description</p></div>
@@ -121,86 +165,78 @@ export default function App_2() {
                   <br></br>
                   <input type="button" value="Submit" className="btn btn-success btn-lg" onClick={handleUploadClick} />
                 </MDBCol>
-                <MDBCol md="4" lg="4" xl="4" className="mb-4 mb-md-0 pdf-container">
+                <MDBCol md="2" lg="2" xl="3" className="mb-4 mb-md-0 pdf-container">
                   <img src={urlImage} style={{ height: "100%", width: "100%" }} />
                 </MDBCol>
-                <MDBCol md="4" lg="4" xl="4">
+                <MDBCol md="6" lg="10" xl="6">
                   <PerfectScrollbar
                     suppressScrollX
                     style={{ position: "relative", height: "400px" }}
                     className="pt-3 pe-3"
                   >
-                    <div className="d-flex flex-row justify-content-start">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                        alt="avatar 1"
-                        style={{ width: "45px", height: "100%" }}
-                      />
-                      <div>
-                        <p
-                          className="small p-2 ms-3 mb-1 rounded-3"
-                          style={{ backgroundColor: "#f5f6f7" }}
-                        >
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua.
-                        </p>
+                    <div>
+                      {console.log(botCV)}
+                      { 
+                      botCV === '' ? (<div style={{ textAlign: "center", fontSize: "30px", fontWeight: "bold" }}>
+                        Job Fit
+                      </div>) : (<div className="d-flex flex-row justify-content-start">
+                        <img
+                          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                          alt="avatar 1"
+                          style={{ width: "45px", height: "100%" }}
+                        />
+                        <div>
+                          <p
+                            className="small p-2 ms-3 mb-1 rounded-3"
+                            style={{ backgroundColor: "#f5f6f7" }}
+                          >
+                            {botCV}
+                          </p>
 
-                      </div>
+                        </div>
+                      </div>)
+                      }
                     </div>
+                    {/* <TypingMyPage/> */}
 
-                    <div className="d-flex flex-row justify-content-end">
-                      <div>
-                        <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
-                          Ut enim ad minim veniam, quis nostrud exercitation
-                          ullamco laboris nisi ut aliquip ex ea commodo
-                          consequat.
-                        </p>
 
-                      </div>
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                        alt="avatar 1"
-                        style={{ width: "45px", height: "100%" }}
-                      />
-                    </div>
                     {userMesss.map(function (i, index) {
-                        return (
-                          <div>
-                            <div className="d-flex flex-row justify-content-end">
-                              <div>
-                                <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
-                                  {i}
-                                </p>
+                      return (
+                        <div>
+                          <div className="d-flex flex-row justify-content-end">
+                            <div>
+                              <p className="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">
+                                {i}
+                              </p>
 
-                              </div>
-                              <img
-                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                alt="avatar 1"
-                                style={{ width: "45px", height: "100%" }}
-                              />
                             </div>
-
-                            <div className="d-flex flex-row justify-content-start">
-                              <img
-                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
-                                alt="avatar 1"
-                                style={{ width: "45px", height: "100%" }}
-                              />
-                              <div>
-                                <p
-                                  className="small p-2 ms-3 mb-1 rounded-3"
-                                  style={{ backgroundColor: "#f5f6f7" }}
-                                >
-                                  {botMess[index]}
-                                </p>
-
-                              </div>
-                            </div>
+                            <img
+                              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                              alt="avatar 1"
+                              style={{ width: "45px", height: "100%" }}
+                            />
                           </div>
 
+                          <div className="d-flex flex-row justify-content-start">
+                            <img
+                              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6-bg.webp"
+                              alt="avatar 1"
+                              style={{ width: "45px", height: "100%" }}
+                            />
+                            <div>
+                              <p
+                                className="small p-2 ms-3 mb-1 rounded-3"
+                                style={{ backgroundColor: "#f5f6f7" }}
+                              >
+                                {botMess[index]}
+                              </p>
 
-                        );
+                            </div>
+                          </div>
+                        </div>
+
+
+                      );
                     })}
                   </PerfectScrollbar>
                   <div className="text-muted d-flex justify-content-start align-items-center pe-3 pt-3 mt-2">
