@@ -98,7 +98,7 @@ export default function App() {
                 <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
                   <h6 className="text-uppercase fw-bold mb-4">
                     <MDBIcon icon="gem" className="me-3" />
-                    Ten doi thi
+                    Innovation Geeks
                   </h6>
                   <p>
                     Tieu chi cua san pham
@@ -177,7 +177,7 @@ export default function App() {
           >
             © 2023 Copyright:
             <a className="text-reset fw-bold" href="/about">
-              Ten doi thi
+              Innovation Geeks
             </a>
           </div>
         </MDBFooter>

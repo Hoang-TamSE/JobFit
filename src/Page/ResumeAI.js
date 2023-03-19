@@ -10,6 +10,8 @@ import {
   MDBBtn,
   MDBCardFooter,
   MDBInputGroup,
+  MDBFile,
+  MDBTextArea
 } from "mdb-react-ui-kit";
 
 import "react-perfect-scrollbar/dist/css/styles.css";
@@ -116,12 +118,12 @@ export default function ResumeAI() {
       <MDBContainer fluid className="py-5" style={{ backgroundColor: "#FFF" }}>
         <MDBRow className="d-flex justify-content-right">
           <MDBCol md="4" lg="4" xl="4" className="mb-4 mb-md-0">
-            <input type="file" onChange={onFileChange} />
-            <div>{file && `${file.name} - ${file.type}`}</div>
+            <MDBFile type="file" onChange={onFileChange} size='lg'/>
+            {/* <div>{file && `${file.name} - ${file.type}`}</div> */}
             <div style={{ margin: "10px" }}>
               <p>Job Description</p>
             </div>
-            <textarea
+            <MDBTextArea
               style={{ width: "350px", height: "450px" }}
               placeholder="Input JD..."
               onChange={onJDChange}
