@@ -4,13 +4,14 @@ import "./index.css";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
+import App_2 from "./App_2";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
   <StrictMode>
-    <App />
+    <App_2 />
   </StrictMode>
 );
 
