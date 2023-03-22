@@ -186,6 +186,7 @@ export default function ResumeAI() {
           </MDBCol>
         </MDBRow>
       </MDBContainer>
+      
     </div>
   );
 }
