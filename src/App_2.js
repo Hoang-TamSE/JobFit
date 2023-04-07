@@ -120,6 +120,7 @@ export default function ResumeAI() {
 
   return (
     <div>
+      <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
       <div style={{fontSize: "50px", marginLeft: "50px", marginTop: "50px"}}>
         Innovation Geeks - Job Fit
       </div>
